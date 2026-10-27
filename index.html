@@ -172,6 +172,60 @@
     #photos .thumbs img.on { border-color: #e8730c; }
     [hidden] { display: none !important; }
 
+    /* 채팅 열기 버튼과 채팅 창 */
+    .chat-fab {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10;
+      border: 0;
+      border-radius: 99px;
+      background: #1f2a44;
+      color: #fff;
+      font-size: 17px;
+      font-weight: bold;
+      padding: 14px 22px;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(31, 42, 68, 0.35);
+    }
+    .chat-fab:hover { background: #e8730c; }
+    .chat-panel {
+      position: fixed;
+      right: 20px;
+      bottom: 80px;
+      z-index: 11;
+      width: 400px;
+      height: min(640px, calc(100dvh - 100px));
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(31, 42, 68, 0.35);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-panel .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 8px 8px 16px;
+      background: #1f2a44;
+      color: #fff;
+      font-weight: bold;
+    }
+    .chat-panel .top button {
+      border: 0;
+      background: transparent;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 4px 10px;
+    }
+    .chat-panel iframe { flex: 1; width: 100%; border: 0; }
+
+    @media (max-width: 700px) {
+      .chat-panel { inset: 0; width: auto; height: auto; border-radius: 0; }
+    }
+
     @media (max-width: 700px) {
       .page {
         grid-template-columns: 1fr;
@@ -312,6 +366,15 @@
     </footer>
   </div>
 
+  <button type="button" class="chat-fab" id="chatOpen">💬 제주 길잡이와 대화</button>
+  <div class="chat-panel" id="chatPanel" hidden>
+    <div class="top">
+      <span>🍊 제주 길잡이</span>
+      <button type="button" id="chatClose" aria-label="채팅 닫기">✕</button>
+    </div>
+    <iframe id="chatFrame" title="제주 길잡이 채팅"></iframe>
+  </div>
+
   <script>
     const PER_PAGE = 10;
     const SLIDE_MS = 3000;
@@ -378,6 +441,20 @@
     $('next').onclick = () => { stop(); move(1); };
     $('pagePrev').onclick = () => load(page - 1);
     $('pageNext').onclick = () => load(page + 1);
+    function openChat() {
+      const frame = $('chatFrame');
+      if (!frame.getAttribute('src')) frame.src = 'agent.html';
+      $('chatPanel').hidden = false;
+      $('chatOpen').hidden = true;
+    }
+    function closeChat() {
+      $('chatPanel').hidden = true;
+      $('chatOpen').hidden = false;
+    }
+    $('chatOpen').onclick = openChat;
+    $('chatClose').onclick = closeChat;
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeChat(); });
+
     document.addEventListener('keydown', e => {
       if ($('viewer').hidden || e.target.tagName === 'INPUT') return;
       if (e.key === 'ArrowLeft') { stop(); move(-1); }
