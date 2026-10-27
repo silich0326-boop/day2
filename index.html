@@ -102,6 +102,7 @@
       <div class="bar">
         <span id="count"></span>
         <span>
+          <button type="button" class="sub" id="play">⏸ 멈춤</button>
           <button type="button" class="sub" id="pagePrev">◀ 이전 10개</button>
           <button type="button" class="sub" id="pageNext">다음 10개 ▶</button>
         </span>
@@ -112,7 +113,8 @@
 
   <script>
     const PER_PAGE = 10;
-    let hits = [], idx = 0, page = 1, total = 0, term = '';
+    const SLIDE_MS = 500;
+    let hits = [], idx = 0, page = 1, total = 0, term = '', timer = null;
 
     const $ = id => document.getElementById(id);
     const qEl = $('q'), msg = $('msg');
@@ -128,7 +130,9 @@
         hits = data.hits; total = data.totalHits; page = p; idx = 0;
         msg.textContent = '';
         $('viewer').hidden = false;
+        hits.forEach(x => { new Image().src = x.webformatURL; });
         render();
+        play();
       } catch (err) {
         msg.textContent = err.message;
       }
@@ -149,22 +153,34 @@
         t.src = x.previewURL;
         t.alt = x.tags;
         if (i === idx) t.className = 'on';
-        t.onclick = () => { idx = i; render(); };
+        t.onclick = () => { stop(); idx = i; render(); };
         box.appendChild(t);
       });
     }
 
     function move(d) { idx = (idx + d + hits.length) % hits.length; render(); }
 
-    $('f').addEventListener('submit', e => { e.preventDefault(); term = qEl.value.trim(); load(1); });
-    $('prev').onclick = () => move(-1);
-    $('next').onclick = () => move(1);
+    function play() {
+      stop();
+      timer = setInterval(() => move(1), SLIDE_MS);
+      $('play').textContent = '⏸ 멈춤';
+    }
+    function stop() {
+      clearInterval(timer);
+      timer = null;
+      $('play').textContent = '▶ 재생';
+    }
+
+    $('f').addEventListener('submit', e => { e.preventDefault(); term = qEl.value.trim(); stop(); load(1); });
+    $('play').onclick = () => (timer ? stop() : play());
+    $('prev').onclick = () => { stop(); move(-1); };
+    $('next').onclick = () => { stop(); move(1); };
     $('pagePrev').onclick = () => load(page - 1);
     $('pageNext').onclick = () => load(page + 1);
     document.addEventListener('keydown', e => {
       if ($('viewer').hidden || e.target.tagName === 'INPUT') return;
-      if (e.key === 'ArrowLeft') move(-1);
-      if (e.key === 'ArrowRight') move(1);
+      if (e.key === 'ArrowLeft') { stop(); move(-1); }
+      if (e.key === 'ArrowRight') { stop(); move(1); }
     });
   </script>
 </body>
