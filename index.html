@@ -3,20 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>이미지 슬라이드</title>
+  <title>제주 특산물 이야기</title>
   <style>
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      padding: 16px;
       font-family: sans-serif;
       background: #fff8ee;
       color: #1f2a44;
     }
-    .wrap { max-width: 720px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-    h1 { margin: 0; font-size: 24px; }
-    form { display: flex; gap: 8px; }
-    input {
+    .page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 2fr 1fr;
+      grid-template-areas:
+        "header  header"
+        "nav     nav"
+        "photo   photo"
+        "section aside"
+        "article aside"
+        "footer  footer";
+    }
+    header  { grid-area: header; }
+    nav     { grid-area: nav; }
+    section { grid-area: section; }
+    #photos { grid-area: photo; }
+    article { grid-area: article; }
+    aside   { grid-area: aside; }
+    footer  { grid-area: footer; }
+
+    header {
+      background: linear-gradient(120deg, #f2994a, #e8730c);
+      color: #fff;
+      border-radius: 18px;
+      padding: 28px 24px;
+      text-align: center;
+    }
+    header h1 { margin: 0; font-size: 30px; }
+    header p { margin: 8px 0 0; font-size: 17px; }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      background: #fff;
+      border-radius: 18px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 10px rgba(31, 42, 68, 0.08);
+    }
+    nav a {
+      text-decoration: none;
+      color: #1f2a44;
+      background: #ffeedb;
+      padding: 8px 16px;
+      border-radius: 99px;
+      font-weight: bold;
+    }
+    nav a:hover { background: #e8730c; color: #fff; }
+
+    section, article, aside {
+      background: #fff;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 18px rgba(31, 42, 68, 0.08);
+    }
+    h2 { margin: 0 0 12px; font-size: 22px; color: #e8730c; }
+    p { line-height: 1.7; margin: 0 0 10px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+    .item {
+      background: #fff8ee;
+      border: 1px solid #ffd9b0;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .item .emoji { font-size: 36px; }
+    .item h3 { margin: 6px 0; font-size: 18px; }
+    .item p { margin: 0; font-size: 15px; }
+
+    aside ul { list-style: none; margin: 0; padding: 0; line-height: 2; }
+    aside .box {
+      margin-top: 14px;
+      background: #fff4e6;
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+
+    footer {
+      background: #1f2a44;
+      color: #bfd0ea;
+      border-radius: 18px;
+      padding: 16px 24px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* 제주 사진 검색 */
+    #photos form { display: flex; gap: 8px; }
+    #photos input {
       flex: 1;
       min-width: 0;
       font-size: 17px;
@@ -24,7 +115,7 @@
       border: 1.5px solid #c5cedd;
       border-radius: 12px;
     }
-    button {
+    #photos button {
       font-size: 16px;
       font-weight: bold;
       padding: 0 18px;
@@ -35,25 +126,25 @@
       color: #fff;
       cursor: pointer;
     }
-    button:disabled { background: #c5cedd; cursor: default; }
-    button.sub { background: #1f2a44; }
-    #msg { min-height: 1.4em; margin: 0; color: #c0392b; }
-    .stage {
+    #photos button:disabled { background: #c5cedd; cursor: default; }
+    #photos button.sub { background: #1f2a44; }
+    #msg { min-height: 1.4em; margin: 8px 0 0; color: #c0392b; }
+    #photos .stage {
       position: relative;
       background: #fff;
-      border-radius: 18px;
+      border-radius: 14px;
       box-shadow: 0 4px 18px rgba(31, 42, 68, 0.1);
       overflow: hidden;
     }
-    .stage img {
+    #photos .stage img {
       display: block;
       width: 100%;
       height: 420px;
       object-fit: contain;
       background: #f2f2f2;
     }
-    .stage .cap { padding: 10px 14px; font-size: 14px; color: #5b6680; }
-    .arrow {
+    #photos .stage .cap { padding: 10px 14px; font-size: 14px; color: #5b6680; margin: 0; }
+    #photos .arrow {
       position: absolute;
       top: 190px;
       width: 44px;
@@ -66,10 +157,10 @@
     }
     #prev { left: 10px; }
     #next { right: 10px; }
-    .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0; }
+    #photos .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 10px 0; flex-wrap: wrap; }
     #count { font-weight: bold; }
-    .thumbs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
-    .thumbs img {
+    #photos .thumbs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; }
+    #photos .thumbs img {
       width: 64px;
       height: 64px;
       object-fit: cover;
@@ -78,37 +169,147 @@
       cursor: pointer;
       flex: none;
     }
-    .thumbs img.on { border-color: #e8730c; }
+    #photos .thumbs img.on { border-color: #e8730c; }
     [hidden] { display: none !important; }
+
+    @media (max-width: 700px) {
+      .page {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "header"
+          "nav"
+          "photo"
+          "section"
+          "article"
+          "aside"
+          "footer";
+      }
+      #photos .stage img { height: 280px; }
+      #photos .arrow { top: 118px; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>🖼️ 이미지 슬라이드</h1>
+  <div class="page">
+    <header>
+      <h1>🍊 나의 제주 특산물 이야기</h1>
+      <p>혼저 옵서예! 바다와 화산섬이 키운 제주의 맛을 만나 보세요</p>
+    </header>
 
-    <form id="f">
-      <input id="q" placeholder="검색어 (예: 제주 귤)" autocomplete="off" aria-label="검색어">
-      <button>검색</button>
-    </form>
-    <p id="msg" role="alert"></p>
+    <nav>
+      <a href="#photos">제주 사진 검색</a>
+      <a href="#recommend">오늘의 추천</a>
+      <a href="#products">특산물 소개</a>
+      <a href="#tips">고르는 팁</a>
+      <a href="#about">소개</a>
+    </nav>
 
-    <div id="viewer" hidden>
-      <div class="stage">
-        <img id="big" alt="">
-        <button type="button" class="arrow" id="prev" aria-label="이전">‹</button>
-        <button type="button" class="arrow" id="next" aria-label="다음">›</button>
-        <div class="cap" id="cap"></div>
+    <section id="photos">
+      <h2>📷 제주 사진 검색</h2>
+      <form id="f">
+        <input id="q" placeholder="검색어 (예: 제주 귤)" autocomplete="off" aria-label="검색어">
+        <button>검색</button>
+      </form>
+      <p id="msg" role="alert"></p>
+
+      <div id="viewer" hidden>
+        <div class="stage">
+          <img id="big" alt="">
+          <button type="button" class="arrow" id="prev" aria-label="이전">‹</button>
+          <button type="button" class="arrow" id="next" aria-label="다음">›</button>
+          <p class="cap" id="cap"></p>
+        </div>
+        <div class="bar">
+          <span id="count"></span>
+          <span>
+            <button type="button" class="sub" id="play">⏸ 멈춤</button>
+            <button type="button" class="sub" id="pagePrev">◀ 이전 10개</button>
+            <button type="button" class="sub" id="pageNext">다음 10개 ▶</button>
+          </span>
+        </div>
+        <div class="thumbs" id="thumbs"></div>
       </div>
-      <div class="bar">
-        <span id="count"></span>
-        <span>
-          <button type="button" class="sub" id="play">⏸ 멈춤</button>
-          <button type="button" class="sub" id="pagePrev">◀ 이전 10개</button>
-          <button type="button" class="sub" id="pageNext">다음 10개 ▶</button>
-        </span>
+    </section>
+
+    <section id="recommend">
+      <h2>🌟 오늘의 추천</h2>
+      <p>제주의 햇살과 바람, 맑은 바다가 키운 먹거리를 모았어요.</p>
+      <p>제주에서만 맛볼 수 있는 이야기와 함께, 계절에 맞는 특산물을 골라 보세요.</p>
+      <div class="item">
+        <div class="emoji">🍊</div>
+        <h3>감귤</h3>
+        <p>겨울에 가장 먼저 떠오르는 제주의 대표 과일이에요. 새콤달콤한 맛이 매력이에요.</p>
       </div>
-      <div class="thumbs" id="thumbs"></div>
-    </div>
+    </section>
+
+    <article id="products">
+      <h2>🧺 특산물 소개</h2>
+      <div class="grid">
+        <div class="item">
+          <div class="emoji">🍊</div>
+          <h3>한라봉</h3>
+          <p>머리 부분이 볼록한 모양이 특징인 감귤류예요. 향긋하고 달콤해요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🍋</div>
+          <h3>천혜향</h3>
+          <p>향이 진한 감귤류예요. 껍질이 얇고 즙이 풍부해요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🐖</div>
+          <h3>흑돼지</h3>
+          <p>제주 하면 떠오르는 대표 음식 재료예요. 고소한 맛으로 사랑받아요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🐟</div>
+          <h3>갈치</h3>
+          <p>제주 바다의 은빛 생선이에요. 구이와 조림으로 즐겨요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🐠</div>
+          <h3>옥돔</h3>
+          <p>담백한 맛의 생선이에요. 구이로 먹으면 고소해요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🥕</div>
+          <h3>제주 당근</h3>
+          <p>달고 아삭한 맛으로 알려진 제주 농산물이에요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🍡</div>
+          <h3>오메기떡</h3>
+          <p>쫀득한 떡에 팥고물을 묻힌 제주 전통 간식이에요.</p>
+        </div>
+        <div class="item">
+          <div class="emoji">🐚</div>
+          <h3>전복</h3>
+          <p>맑은 바다에서 나는 해산물이에요. 죽이나 구이로 즐겨요.</p>
+        </div>
+      </div>
+    </article>
+
+    <aside>
+      <h2>📌 바로가기</h2>
+      <ul>
+        <li>🍊 감귤류 모아 보기</li>
+        <li>🐟 제주 바다 먹거리</li>
+        <li>🐖 제주 고기 요리</li>
+        <li>🍡 제주 간식과 떡</li>
+      </ul>
+      <div class="box" id="tips">
+        <b>💡 고르는 팁</b>
+        <p>제철과 산지, 보관 방법은 판매처의 안내를 꼭 확인하세요.</p>
+      </div>
+      <div class="box" id="about">
+        <b>🗣️ 제주어 한 마디</b>
+        <p>혼저 옵서예 — 어서 오세요</p>
+        <p>폭삭 속았수다 — 수고 많으셨어요</p>
+      </div>
+    </aside>
+
+    <footer>
+      © 2026 day2 실습 · 연습용 사이트예요. 상품 정보와 구매는 판매처의 공식 안내를 확인하세요.
+    </footer>
   </div>
 
   <script>
