@@ -1,8 +1,8 @@
-// Vercel 서버리스 함수: 키는 서버의 환경변수(PIXABAY_KEY)에만 있고 브라우저로 나가지 않아요.
+// Vercel 서버리스 함수: 키는 서버의 환경변수(PIXABAY_API_KEY)에만 있고 브라우저로 나가지 않아요.
 module.exports = async (req, res) => {
-  const key = process.env.PIXABAY_KEY;
+  const key = process.env.PIXABAY_API_KEY;
   if (!key) {
-    res.status(500).json({ error: '서버에 PIXABAY_KEY 환경변수가 없어요.' });
+    res.status(500).json({ error: '서버에 PIXABAY_API_KEY 환경변수가 없어요.' });
     return;
   }
 
