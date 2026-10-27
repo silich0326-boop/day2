@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>라이프 허브</title>
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      background: #f6f8fc;
+      color: #1f2a44;
+    }
+
+    /* 상단 바 */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: #1f2a44;
+      color: #fff;
+    }
+    .bar {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand { font-size: 20px; font-weight: bold; text-decoration: none; color: #fff; }
+
+    /* 메뉴 (PC: 가로) */
+    .menu { display: flex; gap: 6px; }
+    .menu a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 16px;
+      border-radius: 99px;
+    }
+    .menu a:hover, .menu a:focus-visible { background: #e8730c; outline: none; }
+
+    /* 햄버거 버튼 (모바일에서만 보임) */
+    .burger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      cursor: pointer;
+      position: relative;
+    }
+    .burger span {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      height: 3px;
+      border-radius: 2px;
+      background: #fff;
+      transition: transform 0.2s, opacity 0.2s, top 0.2s;
+    }
+    .burger span:nth-child(1) { top: 14px; }
+    .burger span:nth-child(2) { top: 21px; }
+    .burger span:nth-child(3) { top: 28px; }
+    .burger[aria-expanded="true"] span:nth-child(1) { top: 21px; transform: rotate(45deg); }
+    .burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .burger[aria-expanded="true"] span:nth-child(3) { top: 21px; transform: rotate(-45deg); }
+
+    /* 본문 */
+    main { max-width: 1100px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 16px; }
+    .hero {
+      background: linear-gradient(120deg, #1f2a44, #3a5a9a);
+      color: #fff;
+      border-radius: 18px;
+      padding: clamp(22px, 5vw, 40px);
+    }
+    .hero h1 { margin: 0 0 8px; font-size: clamp(24px, 5vw, 34px); }
+    .hero p { margin: 0; line-height: 1.7; color: #dbe6f7; }
+
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 4px 18px rgba(31, 42, 68, 0.08);
+    }
+    .card h2 { margin: 0 0 8px; font-size: 22px; color: #e8730c; }
+    .card p { margin: 0 0 8px; line-height: 1.7; }
+    .card .note { font-size: 13px; color: #5b6680; }
+    .map-box {
+      margin-top: 10px;
+      height: 140px;
+      border-radius: 12px;
+      background: repeating-linear-gradient(45deg, #eef4fb, #eef4fb 12px, #e2ecf8 12px, #e2ecf8 24px);
+      display: grid;
+      place-items: center;
+      color: #5b6680;
+      font-size: 14px;
+    }
+
+    footer { text-align: center; padding: 20px 16px 30px; font-size: 14px; color: #5b6680; }
+
+    /* 모바일: 메뉴를 햄버거로 접기 */
+    @media (max-width: 767px) {
+      .burger { display: block; }
+      .menu {
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        gap: 0;
+        background: #1f2a44;
+        padding: 8px 16px 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.25);
+      }
+      .menu.open { display: flex; }
+      .menu a { padding: 14px 12px; border-radius: 10px; font-size: 17px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="bar">
+      <a class="brand" href="#top">🌐 라이프 허브</a>
+
+      <button class="burger" id="burger" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="menu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="menu" id="menu" aria-label="주요 메뉴">
+        <a href="#food">🍱 음식</a>
+        <a href="#furniture">🛋️ 가구</a>
+        <a href="#realestate">🏠 부동산</a>
+        <a href="#stock">📈 주식</a>
+        <a href="#map">🗺️ 지도</a>
+      </nav>
+    </div>
+  </div>
+
+  <main id="top">
+    <section class="hero">
+      <h1>필요한 정보를 한곳에서</h1>
+      <p>음식, 가구, 부동산, 주식, 지도까지 5가지 카테고리로 나눠 놓았어요.<br>
+         화면이 좁은 휴대폰에서는 오른쪽 위 ☰ 버튼으로 메뉴를 열어 보세요.</p>
+    </section>
+
+    <div class="cards">
+      <section class="card" id="food">
+        <h2>🍱 음식</h2>
+        <p>맛집과 레시피, 오늘의 메뉴를 모아 보는 공간이에요.</p>
+        <p class="note">내용은 앞으로 채워 갈 자리예요.</p>
+      </section>
+
+      <section class="card" id="furniture">
+        <h2>🛋️ 가구</h2>
+        <p>우리 집에 어울리는 가구를 비교하고 골라 보는 공간이에요.</p>
+        <p class="note">내용은 앞으로 채워 갈 자리예요.</p>
+      </section>
+
+      <section class="card" id="realestate">
+        <h2>🏠 부동산</h2>
+        <p>동네와 집 정보를 살펴보는 공간이에요.</p>
+        <p class="note">내용은 앞으로 채워 갈 자리예요.</p>
+      </section>
+
+      <section class="card" id="stock">
+        <h2>📈 주식</h2>
+        <p>관심 있는 종목의 소식을 모아 보는 공간이에요.</p>
+        <p class="note">투자 조언이 아니에요. 판단과 책임은 본인에게 있어요.</p>
+      </section>
+
+      <section class="card" id="map">
+        <h2>🗺️ 지도</h2>
+        <p>가고 싶은 장소를 지도에서 찾아보는 공간이에요.</p>
+        <div class="map-box">지도가 들어갈 자리</div>
+      </section>
+    </div>
+  </main>
+
+  <footer>© 2026 day2 실습 · 연습용 페이지예요</footer>
+
+  <script>
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('menu');
+
+    function setOpen(open) {
+      menu.classList.toggle('open', open);
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      burger.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+    }
+
+    burger.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
+    menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => setOpen(false)));
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.topbar')) setOpen(false);
+    });
+    window.matchMedia('(min-width: 768px)').addEventListener('change', e => { if (e.matches) setOpen(false); });
+  </script>
+</body>
+</html>
