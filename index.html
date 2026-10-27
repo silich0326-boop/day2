@@ -173,6 +173,37 @@
     #photos .thumbs img.on { border-color: #e8730c; }
     [hidden] { display: none !important; }
 
+    /* 라이프 허브(reactive.html) 열기 큰 원형 버튼 */
+    .hub-btn {
+      position: fixed;
+      left: 20px;
+      bottom: calc(20px + env(safe-area-inset-bottom));
+      z-index: 10;
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f2994a, #e8730c);
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-weight: bold;
+      font-size: 15px;
+      line-height: 1.2;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(232, 115, 12, 0.45);
+      transition: transform 0.15s;
+    }
+    .hub-btn .ico { font-size: 38px; line-height: 1; }
+    .hub-btn:hover, .hub-btn:focus-visible { transform: scale(1.08); outline: 3px solid #1f2a44; outline-offset: 3px; }
+    @media (max-width: 700px) {
+      .hub-btn { width: 84px; height: 84px; font-size: 13px; left: 14px; }
+      .hub-btn .ico { font-size: 30px; }
+    }
+
     /* 채팅 열기 버튼과 채팅 창 */
     .chat-fab {
       position: fixed;
@@ -377,6 +408,11 @@
       © 2026 day2 실습 · 연습용 사이트예요. 상품 정보와 구매는 판매처의 공식 안내를 확인하세요.
     </footer>
   </div>
+
+  <a class="hub-btn" href="reactive.html" target="_blank" rel="noopener" aria-label="라이프 허브 열기 (새 탭)">
+    <span class="ico">🌐</span>
+    <span>라이프 허브</span>
+  </a>
 
   <button type="button" class="chat-fab" id="chatOpen">💬 제주 길잡이와 대화</button>
   <div class="chat-panel" id="chatPanel" hidden>
