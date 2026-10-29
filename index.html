@@ -199,8 +199,10 @@
     }
     .hub-btn .ico { font-size: 38px; line-height: 1; }
     .hub-btn:hover, .hub-btn:focus-visible { transform: scale(1.08); outline: 3px solid #1f2a44; outline-offset: 3px; }
+    .hub-btn.space-btn { left: 150px; background: linear-gradient(135deg, #4a6cf2, #1a2a6c); box-shadow: 0 8px 24px rgba(40, 60, 160, 0.45); }
     @media (max-width: 700px) {
       .hub-btn { width: 84px; height: 84px; font-size: 13px; left: 14px; }
+      .hub-btn.space-btn { left: 108px; }
       .hub-btn .ico { font-size: 30px; }
     }
 
@@ -412,6 +414,11 @@
   <a class="hub-btn" href="reactive.html" target="_blank" rel="noopener" aria-label="라이프 허브 열기 (새 탭)">
     <span class="ico">🌐</span>
     <span>라이프 허브</span>
+  </a>
+
+  <a class="hub-btn space-btn" href="space.html" target="_blank" rel="noopener" aria-label="우주 열기 (새 탭)">
+    <span class="ico">🚀</span>
+    <span>우주</span>
   </a>
 
   <button type="button" class="chat-fab" id="chatOpen">💬 제주 길잡이와 대화</button>
